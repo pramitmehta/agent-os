@@ -1,0 +1,159 @@
+# Python
+
+**pycache**/
+*.py[cod]
+*$py.class
+
+# Virtual Environments
+
+.venv/
+venv/
+env/
+ENV/
+
+# Environment Variables
+
+.env
+.env.*
+!.env.example
+
+# IDEs
+
+.vscode/
+.idea/
+
+# OS Files
+
+.DS_Store
+Thumbs.db
+
+# Python Packaging
+
+build/
+dist/
+*.egg-info/
+.eggs/
+
+# Testing
+
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Type Checkers
+
+.mypy_cache/
+.pyre/
+.ruff_cache/
+
+# Logs
+
+logs/
+*.log
+
+# Runtime / PID Files
+
+*.pid
+
+# SQLite
+
+*.sqlite3
+*.db
+
+# Jupyter
+
+.ipynb_checkpoints/
+
+# Docker
+
+docker-data/
+redis-data/
+postgres-data/
+
+# Local Runtime State
+
+runtime_state/
+checkpoints/
+sessions/
+
+# Vector Stores / Embeddings
+
+vector_store/
+chroma/
+faiss/
+embeddings/
+
+# Temporary Files
+
+tmp/
+temp/
+.cache/
+
+# AI/LLM Outputs
+
+outputs/
+artifacts/
+
+# Mac/Linux Swap Files
+
+*.swp
+*.swo
+
+# PyCharm
+
+.idea_modules/
+
+# VSCode Testing
+
+.history/
+
+# Coverage Reports
+
+coverage.xml
+
+# Node (if frontend added later)
+
+node_modules/
+
+# Generated Prompt Artifacts
+
+prompt_cache/
+
+# Local Config Overrides
+
+config.local.yaml
+config.local.yml
+
+# Secrets
+
+secrets/
+*.pem
+*.key
+
+# Runtime Dumps
+
+crash_dumps/
+
+# uv package manager
+
+.uv/
+
+# Ruff
+
+.ruff_cache/
+
+# PDM
+
+.pdm-build/
+
+# Hatch
+
+.hatch/
+
+# Poetry
+
+poetry.toml
+
+# uvicorn
+
+uvicorn.log

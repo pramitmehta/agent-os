@@ -1,0 +1,17 @@
+[package]
+name = "agent-os-app"
+version = "0.1.0"
+description = "API service"
+requires-python = ">=3.12"
+dependencies = [
+    "litestar>=2.0.0",
+    "msgspec>=0.18.0",
+    "agent-os-runtime",
+    "agent-os-agents",
+]
+
+[tool.uv]
+sources = { workspace = true }
+
+[project.scripts]
+agent-os = "agent_os_app.main:main"
