@@ -1,4 +1,4 @@
-[package]
+[project]
 name = "agent-os-app"
 version = "0.1.0"
 description = "API service"
@@ -9,9 +9,6 @@ dependencies = [
     "agent-os-runtime",
     "agent-os-agents",
 ]
-
-[tool.uv]
-sources = { workspace = true }
 
 [project.scripts]
 agent-os = "agent_os_app.main:main"

@@ -6,6 +6,12 @@ readme = "README.md"
 requires-python = ">=3.12"
 license = { text = "MIT" }
 authors = [{ name = "Pramit" }]
+dependencies = [
+    "msgspec>=0.21.1",
+    "pydantic-settings>=2.14.1",
+    "redis[hiredis]>=7.4.0",
+    "structlog>=25.5.0",
+]
 
 [project.optional-dependencies]
 dev = [
@@ -26,17 +32,9 @@ dev-dependencies = [
 [tool.uv.workspace]
 members = ["src/app", "src/runtime", "src/agents"]
 
-[[tool.uv.workspace.packages]]
-location = "src/runtime"
-name = "agent-os-runtime"
-
-[[tool.uv.workspace.packages]]
-location = "src/agents"
-name = "agent-os-agents"
-
-[[tool.uv.workspace.packages]]
-location = "src/app"
-name = "agent-os-app"
+[tool.uv.sources]
+agent-os-runtime = { workspace = true }
+agent-os-agents = { workspace = true }
 
 [tool.ruff]
 target-version = "py312"

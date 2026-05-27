@@ -1,4 +1,4 @@
-[package]
+[project]
 name = "agent-os-runtime"
 version = "0.1.0"
 description = "Runtime orchestration engine"
@@ -10,6 +10,3 @@ dependencies = [
     "asyncpg>=0.29.0",
     "httpx>=0.27.0",
 ]
-
-[tool.uv]
-sources = { workspace = true }

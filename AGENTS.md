@@ -1,44 +1,58 @@
 # AGENTS.md
 
-## Tech Stack (from architecture doc)
+## Tech Stack
 
-- ASGI Framework: Litestar
-- Validation: msgspec
-- Queue/EventBus: Redis
-- ORM: SQLAlchemy
-- DB: PostgreSQL
-- Async Runtime: asyncio
-- HTTP Client: httpx
-- Package Manager: uv
+| Component | Choice |
+|-----------|--------|
+| ASGI Framework | Litestar |
+| Validation | msgspec |
+| EventBus | Redis |
+| ORM | SQLAlchemy |
+| DB | PostgreSQL |
+| HTTP Client | httpx |
+| Package Manager | uv |
+| Lint | ruff (E,F,I,N,W,UP, line-length=100) |
+| Typecheck | mypy --strict |
 
-## Project Structure
+Python 3.12+, MIT license.
+
+## Monorepo Structure (uv workspace)
+
+| Package | Dir | Entrypoint |
+|---------|-----|------------|
+| `agent-os-runtime` | `src/runtime/` | `agent_os_runtime.engine` (deploy/runtime/Dockerfile) |
+| `agent-os-app` | `src/app/` | `agent_os_app.main:main` (CLI: `uv run agent-os`) |
+| `agent-os-agents` | `src/agents/` | `agent_os_agents.run` (deploy/agents/Dockerfile) |
+
+`src/handlers/`, `src/shared/` — not packages; common code in `src/shared/{exceptions,integrations,logging,serialization,telemetry}/`.
+
+Deploy images in `deploy/{app,runtime,agents}/Dockerfile`; `docker-compose.yml` at root runs all 3 services plus Redis + PostgreSQL.
+
+## Architecture (see docs/architecture.md for full detail)
 
 ```
-src/runtime/          # Orchestration engine (consume → dispatch → handlers)
-  ├── engine.py       # Runtime core
-  ├── dispatcher.py   # Route events to handlers
-  ├── registry.py     # Handler registry
-  ├── events.py       # Event definitions
-  ├── context.py      # Execution context
-  └── bus/            # EventBus implementations (base, memory, redis)
-docs/
-  └── architecture.md # Full architecture reference
+EventBus → Runtime → Dispatcher → HandlerRegistry → Handlers → Agents → Tools/Repositories
 ```
 
-## Architecture Notes
-
-- Event-driven: all actions flow as events through EventBus → Runtime → Dispatcher → Handlers → Agents → Tools
-- Dependency direction: Runtime → Dispatcher → Handlers → Agents → Tools/Repositories
-- Agents do NOT know about Runtime, Dispatcher, or EventBus
-- API layer should remain thin (only ingress/egress/validation)
-- LLM does not control deterministic mechanics (e.g., in the Dungeon Master agent)
-
-## Important Principles
-
-- Good systems are: inspectable, replayable, testable, observable, deterministic where possible
-- Avoid: LangChain, CrewAI, AutoGen, framework-heavy abstractions, hidden orchestration logic
-- Avoid premature complexity: microservices, distributed orchestration, graph execution engines, autonomous infinite loops
+- Event-driven: all actions flow as events through the pipeline above
+- Dependency direction is strictly downward (agents know nothing about runtime/dispatcher/EventBus)
+- API layer is thin: only ingress, egress, validation (routes publish events, never orchestrate)
+- LLM never controls deterministic mechanics (e.g., dungeon master rule engine vs. narration)
+- Avoid: LangChain, CrewAI, AutoGen, microservices, graph executors, autonomous infinite loops
 
 ## Current State
 
-This is a greenfield project. `src/runtime/` files are empty stubs. The architecture doc at `docs/architecture.md` is the primary reference for intended design.
+Greenfield — all `.py` files are empty stubs (except `src/runtime/__init__.py` which forward-declares imports). No tests exist yet.
+
+## Commands
+
+```sh
+uv sync                              # install all workspace packages + dev-deps
+uv run ruff check src/               # lint
+uv run mypy src/                     # typecheck (strict)
+uv run pytest                        # run tests (none exist yet)
+uv run agent-os                      # start app service
+uv sync -p src/app                   # sync only app package (for deploy)
+```
+
+Env vars documented in `.env.example`.
